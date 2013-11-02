@@ -2,8 +2,11 @@ package basecrm
 
 import (
 	"encoding/json"
+	"errors"
 	"net/url"
 )
+
+var NotAuthenticated = errors.New("not authenticated")
 
 type Session struct {
 	Token string `json:"token"`

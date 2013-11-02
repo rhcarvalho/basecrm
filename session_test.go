@@ -30,6 +30,13 @@ func (fc *fakeHTTPClient) RoundTrip(req *http.Request) (*http.Response, error) {
 	return res, nil
 }
 
+func (fc *fakeHTTPClient) Get(url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	return fc.RoundTrip(req)
+}
 func (fc *fakeHTTPClient) Post(url string, data url.Values) (*http.Response, error) {
 	body := strings.NewReader(data.Encode())
 	req, err := http.NewRequest("POST", url, body)

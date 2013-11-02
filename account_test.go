@@ -32,6 +32,11 @@ func TestGetAccountAuthorized(t *testing.T) {
 	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/account.json" {
 		t.Errorf("wrong url: %s", url)
 	}
+	tokenPipejump := req.Header.Get("X-Pipejump-Auth")
+	tokenFutureSimple := req.Header.Get("X-Futuresimple-Token")
+	if !(tokenPipejump == s.Token && tokenFutureSimple == s.Token) {
+		t.Errorf("missing token: %s, %s", tokenPipejump, tokenFutureSimple)
+	}
 	if name := account.Name; name != "myaccount" {
 		t.Errorf("wrong account name: %s", name)
 	}

@@ -29,5 +29,11 @@ func main() {
 	//var s *basecrm.Session = basecrm.NewSession(email, password)
 
 	fmt.Printf("Session TOKEN: %s\n", s.Token)
+
+	account, err := s.Account()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Account: %v\n", account)
 }
 ```

@@ -13,7 +13,11 @@ type Account struct {
 }
 
 func (s *Session) Account() (*Account, error) {
-	resp, err := httpClient.Get(AccountEndpoint)
+	req, err := NewRequest("GET", AccountEndpoint, s.Token, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

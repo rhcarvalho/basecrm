@@ -42,7 +42,10 @@ func TestAuthenticationSuccess(t *testing.T) {
 	}
 	httpClient.Transport = ft
 	email, password := "user@company.com", "secret_password"
-	s := NewSession(email, password)
+	s, err := NewSession(email, password)
+	if err != nil {
+		t.Fatalf("session error: %s", err)
+	}
 	req := ft.requests[0]
 	if method := req.Method; method != "POST" {
 		t.Errorf("wrong method: %s", method)
@@ -67,15 +70,15 @@ func TestAuthenticationFailure(t *testing.T) {
 	}
 	httpClient.Transport = ft
 	email, password := "user@company.com", "secret_password"
-	s := NewSession(email, password)
+	_, err := NewSession(email, password)
+	if err != NotAuthenticated {
+		t.Errorf("should be authentication error: %v", err)
+	}
 	req := ft.requests[0]
 	if method := req.Method; method != "POST" {
 		t.Errorf("wrong method: %s", method)
 	}
 	if url := req.URL; url.String() != AuthenticationEndpoint {
 		t.Errorf("wrong url: %s", url)
-	}
-	if token := s.Token; token != "" {
-		t.Errorf("bad token: %s", token)
 	}
 }

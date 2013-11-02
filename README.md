@@ -25,15 +25,24 @@ import (
 
 func main() {
 	email, password := os.Getenv("BASECRM_EMAIL"), os.Getenv("BASECRM_PASSWORD")
-	s := basecrm.NewSession(email, password)
-	//var s *basecrm.Session = basecrm.NewSession(email, password)
-
-	fmt.Printf("Session TOKEN: %s\n", s.Token)
-
-	account, err := s.Account()
-	if err != nil {
-		panic(err)
+	s, err := basecrm.NewSession(email, password)
+	switch err {
+	case nil:
+		fmt.Printf("Session TOKEN: %s\n", s.Token)
+	case basecrm.NotAuthenticated:
+		fmt.Printf("Failed to authenticate.")
+		return
+	default:
+		fmt.Printf("Error: %v", err)
+		return
 	}
-	fmt.Printf("Account: %v\n", account)
+	account, err := s.Account()
+	switch err {
+	case nil:
+		fmt.Printf("Account: %v\n", account)
+	default:
+		fmt.Printf("Error: %v", err)
+		return
+	}
 }
 ```

@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetAccountAuthorized(t *testing.T) {
-	fc := &fakeHTTPClient{
+	ft := &fakeTransport{
 		Answer: func(req *http.Request) string {
 			return `{
 				"account": {
@@ -19,13 +19,13 @@ func TestGetAccountAuthorized(t *testing.T) {
 		},
 		StatusCode: http.StatusOK,
 	}
-	c = fc
+	httpClient.Transport = ft
 	s := &Session{"TOKEN_account_test"}
 	account, err := s.Account()
 	if err != nil {
 		t.Fatalf("account error: %s", err)
 	}
-	req := fc.requests[0]
+	req := ft.requests[0]
 	if method := req.Method; method != "GET" {
 		t.Errorf("wrong method: %s", method)
 	}
@@ -52,13 +52,13 @@ func TestGetAccountAuthorized(t *testing.T) {
 }
 
 func TestGetAccountUnauthorized(t *testing.T) {
-	fc := &fakeHTTPClient{
+	ft := &fakeTransport{
 		Answer: func(req *http.Request) string {
 			return `{"message":"Not authenticated"}`
 		},
 		StatusCode: http.StatusUnauthorized,
 	}
-	c = fc
+	httpClient.Transport = ft
 	s := &Session{"TOKEN_account_test"}
 	account, err := s.Account()
 	if err != NotAuthenticated {
@@ -67,7 +67,7 @@ func TestGetAccountUnauthorized(t *testing.T) {
 	if account != nil {
 		t.Errorf("account should be nil: %v", account)
 	}
-	req := fc.requests[0]
+	req := ft.requests[0]
 	if method := req.Method; method != "GET" {
 		t.Errorf("wrong method: %s", method)
 	}

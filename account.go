@@ -13,7 +13,7 @@ type Account struct {
 }
 
 func (s *Session) Account() (*Account, error) {
-	resp, err := c.Get(AccountEndpoint)
+	resp, err := httpClient.Get(AccountEndpoint)
 	if err != nil {
 		return nil, err
 	}

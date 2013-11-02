@@ -13,10 +13,14 @@ type Session struct {
 }
 
 func NewSession(email, password string) *Session {
-	resp, err := c.Post(AuthenticationEndpoint, url.Values{
+	req, err := NewRequest("POST", AuthenticationEndpoint, "", url.Values{
 		"email":    {email},
 		"password": {password},
 	})
+	if err != nil {
+		panic(err)
+	}
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		panic(err)
 	}

@@ -13,7 +13,7 @@ type Session struct {
 }
 
 func NewSession(email, password string) *Session {
-	resp, err := c.Post("https://sales.futuresimple.com/api/v1/authentication.json", url.Values{
+	resp, err := c.Post(AuthenticationEndpoint, url.Values{
 		"email":    {email},
 		"password": {password},
 	})

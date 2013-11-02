@@ -29,7 +29,7 @@ func TestGetAccountAuthorized(t *testing.T) {
 	if method := req.Method; method != "GET" {
 		t.Errorf("wrong method: %s", method)
 	}
-	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/account.json" {
+	if url := req.URL; url.String() != AccountEndpoint {
 		t.Errorf("wrong url: %s", url)
 	}
 	tokenPipejump := req.Header.Get("X-Pipejump-Auth")
@@ -71,7 +71,7 @@ func TestGetAccountUnauthorized(t *testing.T) {
 	if method := req.Method; method != "GET" {
 		t.Errorf("wrong method: %s", method)
 	}
-	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/account.json" {
+	if url := req.URL; url.String() != AccountEndpoint {
 		t.Errorf("wrong url: %s", url)
 	}
 }

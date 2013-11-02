@@ -65,7 +65,7 @@ func TestAuthenticationSuccess(t *testing.T) {
 	if method := req.Method; method != "POST" {
 		t.Errorf("wrong method: %s", method)
 	}
-	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/authentication.json" {
+	if url := req.URL; url.String() != AuthenticationEndpoint {
 		t.Errorf("wrong url: %s", url)
 	}
 	if token := s.Token; token != "TOKEN_user@company.com" {
@@ -90,7 +90,7 @@ func TestAuthenticationFailure(t *testing.T) {
 	if method := req.Method; method != "POST" {
 		t.Errorf("wrong method: %s", method)
 	}
-	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/authentication.json" {
+	if url := req.URL; url.String() != AuthenticationEndpoint {
 		t.Errorf("wrong url: %s", url)
 	}
 	if token := s.Token; token != "" {

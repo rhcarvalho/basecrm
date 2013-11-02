@@ -13,7 +13,7 @@ type Account struct {
 }
 
 func (s *Session) Account() (*Account, error) {
-	resp, err := c.Get("https://sales.futuresimple.com/api/v1/account.json")
+	resp, err := c.Get(AccountEndpoint)
 	if err != nil {
 		return nil, err
 	}

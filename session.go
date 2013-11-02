@@ -6,13 +6,7 @@ import (
 )
 
 type Session struct {
-	Token string
-}
-
-type jsonResponse struct {
-	Authentication struct {
-		Token string `json:"token"`
-	} `json:"authentication"`
+	Token string `json:"token"`
 }
 
 func NewSession(email, password string) *Session {
@@ -24,13 +18,13 @@ func NewSession(email, password string) *Session {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	auth := &jsonResponse{}
+	message := &struct {
+		Authentication *Session
+	}{}
 	dec := json.NewDecoder(resp.Body)
-	err = dec.Decode(auth)
+	err = dec.Decode(message)
 	if err != nil {
 		panic(err)
 	}
-	return &Session{
-		Token: auth.Authentication.Token,
-	}
+	return message.Authentication
 }

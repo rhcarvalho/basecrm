@@ -40,7 +40,7 @@ func (fc *fakeHTTPClient) Post(url string, data url.Values) (*http.Response, err
 	return fc.RoundTrip(req)
 }
 
-func TestAuthentication(t *testing.T) {
+func TestAuthenticationSuccess(t *testing.T) {
 	fc := &fakeHTTPClient{
 		Answer: func(req *http.Request) string {
 			return fmt.Sprintf(`{
@@ -62,6 +62,31 @@ func TestAuthentication(t *testing.T) {
 		t.Errorf("wrong url: %s", url)
 	}
 	if token := s.Token; token != "TOKEN_user@company.com" {
+		t.Errorf("bad token: %s", token)
+	}
+}
+
+func TestAuthenticationFailure(t *testing.T) {
+	fc := &fakeHTTPClient{
+		Answer: func(req *http.Request) string {
+			return `{
+				"authentication": {
+				}
+			}`
+		},
+		StatusCode: http.StatusUnauthorized,
+	}
+	c = fc
+	email, password := "user@company.com", "secret_password"
+	s := NewSession(email, password)
+	req := fc.requests[0]
+	if method := req.Method; method != "POST" {
+		t.Errorf("wrong method: %s", method)
+	}
+	if url := req.URL; url.String() != "https://sales.futuresimple.com/api/v1/authentication.json" {
+		t.Errorf("wrong url: %s", url)
+	}
+	if token := s.Token; token != "" {
 		t.Errorf("bad token: %s", token)
 	}
 }
